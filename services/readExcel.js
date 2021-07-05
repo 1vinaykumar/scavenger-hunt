@@ -53,4 +53,4 @@ const insertToDB = async () => {
   });
 };
 
-module.exports = { getBranchData, insertToDB };
+module.exports = insertToDB;

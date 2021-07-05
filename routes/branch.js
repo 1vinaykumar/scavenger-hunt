@@ -1,7 +1,7 @@
 const User = require("../models/userSchema");
 const Branch = require("../models/branchSchema");
 const { authentication } = require("./user");
-const io = require("../services/socketApp");
+const socket = require("../app");
 const router = require("express").Router();
 const { Notification } = require("../models/notificationSchema");
 
@@ -23,7 +23,7 @@ router.post("/servingBranches", async (req, res) => {
     message: `${details.name} searched for the pincode`,
     details,
   });
-  io.to(servingBranchUserNames).emit("notification", notification);
+  socket.to(servingBranchUserNames).emit("notification", notification);
   await User.updateMany(
     { userName: { $in: servingBranchUserNames } },
     {

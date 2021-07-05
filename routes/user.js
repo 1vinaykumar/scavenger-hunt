@@ -65,20 +65,6 @@ const userRegisterValidation = (user) =>
     role: Joi.string().valid("USER", "ADMIN").required(),
   }).validate(user);
 
-// router.post("/", async (req, res) => {
-//   const validatedData = userRegisterValidation(req.body);
-//   if (!validatedData.error) {
-//     const { password } = validatedData.value;
-//     const salt = await bcrypt.genSalt(10);
-//     const hashedPassword = await bcrypt.hash(password, salt);
-//     validatedData.value.password = hashedPassword;
-//     await User.create(validatedData.value);
-//     return res.status(201).send("User created successfully");
-//   } else {
-//     return res.status(403).send("Invalid Form data");
-//   }
-// });
-
 router.get("/:userName", authentication, async (req, res) => {
   const branchDetails = await Branch.findById(req?.user?.branchDetails);
   const { userName, notifications } = req.user;
