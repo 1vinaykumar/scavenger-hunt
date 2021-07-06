@@ -1,13 +1,16 @@
 const User = require("../models/userSchema");
 const Branch = require("../models/branchSchema");
 const { authentication } = require("./user");
-const socket = require("../services/socketApp").io;
 const router = require("express").Router();
 const { Notification } = require("../models/notificationSchema");
 
 router.get("/", authentication, async (req, res) => {
   const branchData = await Branch.find();
-  return req?.user?.role === "ADMIN" ? res.json(branchData) : res.send(401);
+  if (req?.user?.role === "ADMIN") {
+    return res.json(branchData);
+  } else {
+    return res.send(401);
+  }
 });
 
 router.post("/servingBranches", async (req, res) => {
@@ -20,10 +23,12 @@ router.post("/servingBranches", async (req, res) => {
   servingBranchUserNames.push("vinaykumar");
   const notification = new Notification({
     timestamp: new Date(),
-    message: `${details.name} searched for the pincode`,
+    message: `${details.name} searched for the pincode ${details.pincode}`,
     details,
   });
-  socket.to(servingBranchUserNames).emit("notification", notification);
+  req?.socketInstance
+    ?.to(servingBranchUserNames)
+    .emit("notification", notification);
   await User.updateMany(
     { userName: { $in: servingBranchUserNames } },
     {

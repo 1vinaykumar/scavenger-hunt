@@ -58,13 +58,6 @@ router.post("/login", async (req, res) => {
   }
 });
 
-const userRegisterValidation = (user) =>
-  Joi.object({
-    userName: Joi.string().min(5).required(),
-    password: Joi.string().min(5).required(),
-    role: Joi.string().valid("USER", "ADMIN").required(),
-  }).validate(user);
-
 router.get("/:userName", authentication, async (req, res) => {
   const branchDetails = await Branch.findById(req?.user?.branchDetails);
   const { userName, notifications } = req.user;
