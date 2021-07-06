@@ -1,7 +1,7 @@
 const User = require("../models/userSchema");
 const Branch = require("../models/branchSchema");
 const { authentication } = require("./user");
-const socket = require("../app");
+const socket = require("../services/socketApp").io;
 const router = require("express").Router();
 const { Notification } = require("../models/notificationSchema");
 
